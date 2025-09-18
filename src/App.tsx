@@ -325,7 +325,210 @@ function App() {
         </div>
       </div>
 
-      {/* ... rest of your JSX unchanged ... */}
+      <div className="max-w-4xl mx-auto p-4 md:p-6 space-y-6">
+        {/* Input Settings */}
+        <div className="bg-white rounded-xl shadow-lg p-6">
+          <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+            <Upload className="w-5 h-5" />
+            Input Settings
+          </h2>
+
+          {/* File Upload */}
+          <div className="space-y-4">
+            <div
+              className={`border-2 border-dashed rounded-lg p-4 md:p-6 text-center transition-all duration-200 ${
+                isDragOver 
+                  ? 'border-pink-500 bg-pink-50' 
+                  : 'border-gray-300 hover:border-pink-400'
+              }`}
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={handleDrop}
+            >
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept=".csv,.txt"
+                onChange={handleFileUpload}
+                className="hidden"
+              />
+              <button
+                onClick={() => fileInputRef.current?.click()}
+                className="w-full touch-manipulation"
+              >
+                <FileText className="w-8 h-8 mx-auto text-gray-400 mb-2" />
+                <p className="text-sm md:text-base text-gray-600">
+                  {fileName ? fileName : 'Click to select CSV or TXT file'}
+                </p>
+                <p className="text-xs text-gray-500 mt-1">
+                  Supports CSV and TXT files with Instagram usernames
+                </p>
+              </button>
+            </div>
+
+            {/* Options */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="flex items-center space-x-2">
+                <input
+                  type="checkbox"
+                  id="resume"
+                  checked={resumeSession}
+                  onChange={(e) => setResumeSession(e.target.checked)}
+                  className="rounded border-gray-300 text-pink-600 focus:ring-pink-500 w-4 h-4"
+                />
+                <label htmlFor="resume" className="text-sm font-medium select-none">
+                  Resume session
+                </label>
+              </div>
+
+              <div className="space-y-1">
+                <label className="text-sm font-medium text-gray-700">
+                  Min. Delay (s)
+                </label>
+                <input
+                  type="number"
+                  value={minDelay}
+                  onChange={(e) => setMinDelay(parseInt(e.target.value))}
+                  min="1"
+                  max="120"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 text-base"
+                />
+              </div>
+
+              <div className="space-y-1">
+                <label className="text-sm font-medium text-gray-700">
+                  Max. Delay (s)
+                </label>
+                <input
+                  type="number"
+                  value={maxDelay}
+                  onChange={(e) => setMaxDelay(parseInt(e.target.value))}
+                  min="1"
+                  max="120"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 text-base"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Controls */}
+        <div className="bg-white rounded-xl shadow-lg p-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
+            <button
+              onClick={startVerification}
+              disabled={usernames.length === 0 || isProcessing}
+              className="flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white px-4 md:px-6 py-3 rounded-lg font-medium transition-colors touch-manipulation text-sm md:text-base"
+            >
+              <Play className="w-4 h-4" />
+              Start Checking
+            </button>
+
+            <button
+              onClick={stopVerification}
+              disabled={!isProcessing}
+              className="flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 disabled:bg-gray-400 text-white px-4 md:px-6 py-3 rounded-lg font-medium transition-colors touch-manipulation text-sm md:text-base"
+            >
+              <Square className="w-4 h-4" />
+              Stop Checking
+            </button>
+
+            <button
+              onClick={exportResults}
+              disabled={results.length === 0}
+              className="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white px-4 md:px-6 py-3 rounded-lg font-medium transition-colors touch-manipulation text-sm md:text-base sm:col-span-2 lg:col-span-1"
+            >
+              <Download className="w-4 h-4" />
+              Export Results
+            </button>
+          </div>
+        </div>
+
+        {/* Progress */}
+        {progress.total > 0 && (
+          <div className="bg-white rounded-xl shadow-lg p-6">
+            <div className="flex items-center gap-2 mb-3">
+              <Users className="w-5 h-5 text-pink-600" />
+              <span className="font-medium text-sm md:text-base">
+                Progress: {progress.current}/{progress.total} ({progress.percentage}%)
+              </span>
+            </div>
+
+            <div className="w-full bg-gray-200 rounded-full h-2 md:h-3 mb-4">
+              <div
+                className="bg-gradient-to-r from-pink-500 to-red-500 h-2 md:h-3 rounded-full transition-all duration-300"
+                style={{ width: `${progress.percentage}%` }}
+              />
+            </div>
+
+            {progress.estimatedTime && (
+              <div className="flex items-center gap-2 text-sm text-gray-600">
+                <Clock className="w-4 h-4" />
+                Estimated time remaining: {progress.estimatedTime}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Status */}
+        <div className="bg-white rounded-xl shadow-lg p-4">
+          <div className="flex items-center gap-2 text-gray-700">
+            <AlertCircle className="w-5 h-5" />
+            <span className="break-words">{status}</span>
+          </div>
+        </div>
+
+        {/* Results Table */}
+        {results.length > 0 && (
+          <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+            <div className="p-6 border-b">
+              <h2 className="text-lg md:text-xl font-semibold">Profile Information Results ({results.length})</h2>
+            </div>
+
+            <div className="overflow-x-auto max-h-96 md:max-h-none">
+              <table className="w-full">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="text-left py-2 md:py-3 px-3 md:px-6 font-medium text-gray-900 text-sm md:text-base">Username</th>
+                    <th className="text-left py-2 md:py-3 px-3 md:px-6 font-medium text-gray-900 text-sm md:text-base">Posted Date</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {results.map((result, index) => (
+                    <tr key={index} className="border-t hover:bg-gray-50">
+                      <td className="py-2 md:py-3 px-3 md:px-6 font-medium text-sm md:text-base break-all">{result.username}</td>
+                      <td className={`py-2 md:py-3 px-3 md:px-6 text-sm md:text-base ${result.error ? 'text-red-600 bg-red-50' : 'text-gray-900'}`}>
+                        <div className="flex items-center gap-2">
+                          {result.error ? (
+                            <AlertCircle className="w-4 h-4" />
+                          ) : (
+                            <CheckCircle className="w-4 h-4 text-green-600" />
+                          )}
+                          <span className="break-words">{result.post_date}</span>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
+        {/* Mobile Footer */}
+        <div className="md:hidden bg-white rounded-xl shadow-lg p-4 text-center">
+          <div className="flex items-center justify-center gap-4 text-sm text-gray-600">
+            <div className="flex items-center gap-1">
+              <Wifi className="w-4 h-4" />
+              <span>Online</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <Battery className="w-4 h-4" />
+              <span>Optimized</span>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
