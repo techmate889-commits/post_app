@@ -12,12 +12,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Install Supabase CLI
-        run: npm install -g supabase
-
       - name: Deploy instagram-scraper function
         env:
           SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
         run: | 
-          supabase link --project-ref annjzekiqvbupmqwldiy
-          supabase functions deploy instagram-scraper
+          npx supabase@latest link --project-ref annjzekiqvbupmqwldiy
+          npx supabase@latest functions deploy instagram-scraper
