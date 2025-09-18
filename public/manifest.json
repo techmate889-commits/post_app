@@ -1,0 +1,21 @@
+{
+  "name": "Instagram Profile Post Date Checker",
+  "short_name": "IG Checker",
+  "description": "Check the latest post dates of Instagram profiles in bulk",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#e91e63",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/vite.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["social", "utilities"],
+  "lang": "en",
+  "dir": "ltr"
+}
