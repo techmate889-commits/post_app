@@ -18,6 +18,6 @@ jobs:
       - name: Deploy instagram-scraper function
         env:
           SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
-        run: |
+        run: | 
           supabase link --project-ref annjzekiqvbupmqwldiy
           supabase functions deploy instagram-scraper
